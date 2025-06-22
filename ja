@@ -18,37 +18,30 @@ symfony server:start
 
 
 
+composer require orm-fixtures
+
+
+
+
+
+
 ProductFixtures.php 
 
  
 class ProductFixtures extends Fixture 
-
 { 
-
 public function load(ObjectManager $manager): void 
-
 { 
-
 for ($i= 1; $i <= 10; $i++) { 
-
 $product = new Product(); 
-
 $product 
-
 ->setName('Product'. $i) 
-
 ->setDescription('Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua') 
-
 ->setPrice (mt_rand (10, 600)); 
-
 $manager->persist ($product); 
-
 } 
-
 $manager->flush(); 
-
 } 
-
 } 
 
  
@@ -58,25 +51,15 @@ $manager->flush();
 HomeController.php 
 
 final class HomeController extends AbstractController 
-
 { 
-
     # homepage products 
-
     #[Route('/', name: 'app_home')] 
-
     public function index(CartSessionStorage $cartSessionStorage, ProductRepository $productRepository): Response 
-
     { 
-
         return $this->render('home/index.html.twig', [ 
-
             'products' => $productRepository->findAll(), 
-
             'amount' => $cartSessionStorage->getNumberOfProductInCart(), 
-
         ]); 
-
     } 
 
  
@@ -90,23 +73,14 @@ final class HomeController extends AbstractController
 Base.html.twig 
 
 {% block header %} 
-
 <nav class="navbar navbar-dark bg-dark sticky-top"> 
-
 <a href="{{ path ('app_home') }}" class="navbar-brand">  
-
 Smartphone Shop 
-
 </a> 
-
 <a href="{{ path ('app_home') }}"> 
-
 </a> 
-
 </nav> 
-
 <span class="badge bg-secondary ">{{ amount }}</span> <i class="bi-cart" style="..."></i> 
-
 {% endblock %} 
 
  
@@ -118,33 +92,19 @@ Home/index.html.twig
  
 
 {% extends 'base.html.twig' %} 
-
 {% block body %}  
-
 {% for product in products %}  
-
     <div class="card" style="width: 18rem;"> 
-
       <img class="card-img-top" src="https://dummyimage.com/200x150" alt="{{ product.name }}"> 
-
       <div class="card-body"> 
-
         <h5 class="card-title">{{ product.name }}</h5> 
-
 <p class="card-text">{{ product.description }}</p> 
-
    <a href="{{ path('app_product_add', {id: product.id}) }}" class="btn btn-primary">Buy</a> 
-
       </div> 
-
     </div> 
-
   {% else %} 
-
     <p>Geen producten gevonden.</p> 
-
 {% endfor %} { 
-
 % endblock %} 
 
  
@@ -152,19 +112,12 @@ Home/index.html.twig
 HomeController.php 
 
 #[Route('/product/add/{id}', name: 'app_product_add')] 
-
 public function add (CartSessionStorage $cartSessionStorage, 
-
 int $id): Response 
-
 { 
-
 $cartSessionStorage->addProductToCart ($id); 
-
  return $this->redirectToRoute ('app_home'); 
-
 } 
-
 } 
 
  
@@ -176,31 +129,17 @@ CartController.php
  
 
 final class CartController extends AbstractController 
-
 { 
-
 #[Route('/cart', name: 'app_cart')] 
-
 public function index (CartSessionStorage $cartSessionStorage): Response 
-
 { 
-
 $shoppingCart = $cartSessionStorage->getShoppingCart(); 
-
- 
-
 return $this->render('cart/index.html.twig', [ 
-
 'shoppingCart' => $shoppingCart, 
-
 'amount' => $cartSessionStorage->getNumberOfProductInCart(), 
-
 'totalPrice'>$cartSessionStorage->getTotalPrice(), 
-
 ]); 
-
 } 
-
 } 
 
  
@@ -209,125 +148,61 @@ Cart/index.html.twig
 
  
 {% extends 'base.html.twig' %} 
-
-  
-
 {% block title %}Winkelwagen{% endblock %} 
-
-  
-
 {% block body %} 
-
 <div class="container mt-4"> 
-
-    <h1 class="mb-4">Jouw winkelwagen</h1> 
-
-     
-
+    <h1 class="mb-4">Jouw winkelwagen</h1>
     {% if shoppingCart is empty %} 
-
         <div class="alert alert-info"> 
-
             Je winkelwagen is leeg. <a href="{{ path('app_products') }}" class="alert-link">Bekijk producten</a> 
-
         </div> 
-
     {% else %} 
-
         <div class="table-responsive"> 
-
             <table class="table table-hover"> 
-
                 <thead class="table-light"> 
-
                     <tr> 
-
                         <th>Afbeelding</th> 
-
                         <th>Product</th> 
-
                         <th>Aantal</th> 
-
                         <th>Beschrijving</th> 
-
                         <th>Prijs</th> 
-
                         <th></th> 
-
                     </tr> 
-
                 </thead> 
-
                 <tbody> 
-
                     {% for orderLine in shoppingCart %} 
-
                     <tr> 
-
                         <td> 
-
                             <img src="https://dummyimage.com/200x150/eee/aaa"  
-
                                  class="img-thumbnail"  
-
                                  width="64"  
-
                                  alt="{{ orderLine.product.name }}"> 
-
                         </td> 
-
                         <td class="align-middle">{{ orderLine.product.name }}</td> 
-
                         <td class="align-middle"> 
-
                             <div class="input-group input-group-sm" style="width: 100px;"> 
-
                                 <input type="number"  
-
                                        class="form-control"  
-
                                        value="{{ orderLine.quantity }}"  
-
                                        min="1"> 
-
                             </div> 
-
                         </td> 
-
                         <td class="align-middle"> 
-
                             <small class="text-muted"> 
-
                                 {{ orderLine.product.description[:50] }}... 
-
                             </small> 
-
                         </td> 
-
                         <td class="align-middle">€{{ orderLine.product.price|number_format(2, ',', '.') }}</td> 
-
                         <td class="align-middle"> 
-
                                 <i class="bi bi-trash"></i> 
-
                             </a> 
-
                         </td> 
-
                     </tr> 
-
                     {% endfor %} 
-
                 </tbody> 
-
             </table> 
-
         </div> 
-
         </div> 
-
     {% endif %} 
-
 </div> 
-
 {% endblock %} 
