@@ -20,7 +20,7 @@ symfony server:start
 
 composer require orm-fixtures
 
-
+symfony console doctrine:fixtures:load
 
 
 
