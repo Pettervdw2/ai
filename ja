@@ -16,6 +16,13 @@ symfony server:start
 
 
 
+composer require symfony/maker-bundle --dev
+ 
+php bin/console make:crud Student
+ 
+php -S localhost:8000 -t public
+ 
+
 
 
 composer require orm-fixtures
