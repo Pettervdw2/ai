@@ -120,19 +120,28 @@ Home/index.html.twig
 {% extends 'base.html.twig' %}
 
 {% block body %}
-  {% for product in products %}
-    <div class="card" style="width: 18rem;">
-      <img class="card-img-top" src="https://dummyimage.com/200x150" alt="{{ product.name }}">
-      <div class="card-body">
-        <h5 class="card-title">{{ product.name }}</h5>
-        <p class="card-text">{{ product.description }}</p>
-        <a href="{{ path('app_product_add', {id: product.id}) }}" class="btn btn-primary">Buy</a>
-      </div>
+  <div class="container mt-4">
+    <div class="row g-3">
+      {% for product in products %}
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img class="card-img-top" src="https://dummyimage.com/200x150" alt="{{ product.name }}">
+            <div class="card-body">
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="card-text">{{ product.description }}</p>
+              <a href="{{ path('app_product_add', {id: product.id}) }}" class="btn btn-primary">Buy</a>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="col-12">
+          <p>Geen producten gevonden.</p>
+        </div>
+      {% endfor %}
     </div>
-  {% else %}
-    <p>Geen producten gevonden.</p>
-  {% endfor %}
+  </div>
 {% endblock %}
+
 
 
  
