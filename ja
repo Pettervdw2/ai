@@ -78,7 +78,7 @@ use App\Storage\CartSessionStorage;
 final class HomeController extends AbstractController 
 { 
     # homepage products 
-    #[Route('/', name: 'app_home')] 
+    #[Route('home', name: 'app_home')] 
     public function index(CartSessionStorage $cartSessionStorage, ProductRepository $productRepository): Response 
     { 
         return $this->render('home/index.html.twig', [ 
@@ -86,6 +86,7 @@ final class HomeController extends AbstractController
             'amount' => $cartSessionStorage->getNumberOfProductInCart(), 
         ]); 
     } 
+}
 
  
 
