@@ -27,6 +27,8 @@ php -S localhost:8000 -t public
 
 composer require orm-fixtures
 
+symfony console make:fixtures ProductFixtures
+
 symfony console doctrine:fixtures:load
 
 
