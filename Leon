@@ -81,4 +81,6 @@
 1. Maak altijd snapshots voor grote wijzigingen
 2. Test elke stap (configtest, browser check)
 3. Noteer IP-adressen
-4. Oefen met vi/nano voor snel bewerken
+4. Oefen met vi/nano voor snel bewerken|
+
+Gebruik apache2ctl configtest bij fouten.
