@@ -51,7 +51,7 @@
 ## 5. Client Configuratie
 - Linux:
   sudo vi /etc/hosts
-  (voeg server-IP en domeinnamen toe)
+  (Voeg toe: `192.168.1.100 mijnsite.test`)
 - Windows:
   Bewerk als admin:
   C:\Windows\System32\drivers\etc\hosts
