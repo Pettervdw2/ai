@@ -1,0 +1,84 @@
+# Stappenplan Webserver Toets - Apache, Virtual Hosts & GitHub
+
+## 1. Basis Apache Installatie
+- Snapshot maken in VMware voor terugvaloptie
+- Systeem updaten:
+  sudo zypper refresh && sudo zypper update
+- Apache installeren:
+  sudo zypper install apache2
+- Service beheren:
+  * Status: systemctl status apache2.service
+  * Starten: sudo systemctl start apache2.service
+  * Herstarten: sudo systemctl restart apache2.service
+
+## 2. Standaard Website Maken
+- DocumentRoot: /srv/www/htdocs
+- index.html aanmaken:
+  sudo vi /srv/www/htdocs/index.html
+  (basis HTML invullen)
+- Configuratie testen:
+  sudo apache2ctl configtest
+- Website bereikbaar via:
+  * Firefox: http://localhost of server-IP
+  * CLI: w3m localhost
+
+## 3. Virtual Hosting (Meerdere Websites)
+1. Mappen aanmaken:
+   sudo mkdir -p /srv/www/vhosts/{site1,site2}.test
+2. index.html bestanden maken per site
+3. Configuratie:
+   - Kopieer template:
+     sudo cp /etc/apache2/vhosts.d/vhost.template /etc/apache2/vhosts.d/site1.conf
+   - Bewerk .conf-bestanden:
+     * Vervang dummy-host.example.com door echte domeinnaam
+     * Zorg dat <VirtualHost *:80> actief is
+4. NameVirtualHost activeren:
+   sudo vi /etc/apache2/listen.conf
+   (verwijder # voor NameVirtualHost *:80)
+5. Hosts-bestand aanpassen:
+   sudo vi /etc/hosts
+   (voeg IP en domeinnamen toe)
+
+## 4. GitHub Integration
+- Git installeren:
+  sudo zypper install git
+- Repository clonen:
+  cd /srv/www/htdocs
+  sudo git clone https://github.com/voorbeeld/repo
+- Apache herstarten:
+  sudo systemctl restart apache2
+
+## 5. Client Configuratie
+- Linux:
+  sudo vi /etc/hosts
+  (voeg server-IP en domeinnamen toe)
+- Windows:
+  Bewerk als admin:
+  C:\Windows\System32\drivers\etc\hosts
+  (zelfde toevoegingen)
+
+## 6. Firewall
+- Uitschakelen indien nodig:
+  sudo systemctl stop firewalld.service
+  sudo systemctl disable firewalld.service
+
+## Belangrijke Bestanden
+- Apache config: /etc/apache2/
+- Standaard website: /srv/www/htdocs/
+- Virtual hosts: /srv/www/vhosts/
+- Hosts-bestand Linux: /etc/hosts
+- Hosts-bestand Windows: C:\Windows\System32\drivers\etc\hosts
+
+## Te Leren Commando's
+- systemctl [status|start|restart] apache2.service
+- apache2ctl configtest
+- zypper install [pakket]
+- vi/nano [bestand]
+- git clone [url]
+- mkdir, cp, mv
+
+## Tips
+1. Maak altijd snapshots voor grote wijzigingen
+2. Test elke stap (configtest, browser check)
+3. Noteer IP-adressen
+4. Oefen met vi/nano voor snel bewerken
