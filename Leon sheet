@@ -1,0 +1,96 @@
+
+
+=== BASIS STAPPEN ===
+1. SNAPSHOT MAKEN IN VMWARE (EERSTE STAP!)
+2. Systeem updaten:
+   sudo zypper refresh && sudo zypper update
+
+3. Apache installeren:
+   sudo zypper install apache2
+
+4. Service beheren:
+   - Starten:    sudo systemctl start apache2.service
+   - Stoppen:    sudo systemctl stop apache2.service
+   - Herstarten: sudo systemctl restart apache2.service
+   - Status:     systemctl status apache2.service
+
+5. Standaard website:
+   - Map: /srv/www/htdocs/
+   - index.html aanmaken:
+     sudo vi /srv/www/htdocs/index.html
+     (minimale HTML: <html><body>Mijn site</body></html>)
+
+=== VIRTUAL HOSTS (MEERDERE SITES) ===
+1. Mappen aanmaken:
+   sudo mkdir -p /srv/www/vhosts/site1.test /srv/www/vhosts/site2.test
+
+2. Configuratiebestanden:
+   - Kopiëren template:
+     sudo cp /etc/apache2/vhosts.d/vhost.template /etc/apache2/vhosts.d/site1.conf
+   - Bewerken:
+     sudo vi /etc/apache2/vhosts.d/site1.conf
+     * Vervang ALLE "dummy-host.example.com" door "site1.test"
+     * Zorg dat "<VirtualHost *:80>" bovenaan staat
+
+3. NameVirtualHost activeren:
+   sudo vi /etc/apache2/listen.conf
+   -> Verwijder # voor "NameVirtualHost *:80"
+
+4. Hosts-bestand aanpassen (Linux):
+   sudo vi /etc/hosts
+   -> Voeg toe: "192.168.1.100 site1.test site2.test"
+
+=== GITHUB INTEGRATIE ===
+1. Git installeren:
+   sudo zypper install git
+
+2. Repository clonen:
+   cd /srv/www/htdocs
+   sudo git clone https://github.com/voorbeeld/repo
+
+=== CLIENT CONFIGURATIE ===
+1. Linux:
+   sudo vi /etc/hosts
+   -> Voeg server-IP en domeinnamen toe
+
+2. Windows:
+   - Open Notepad ALS ADMINISTRATOR
+   - Bewerk: C:\Windows\System32\drivers\etc\hosts
+   -> Voeg toe: "192.168.1.100 site1.test"
+
+=== FOUTOPLOSSING ===
+1. Apache configuratie testen:
+   sudo apache2ctl configtest
+
+2. Logs bekijken:
+   tail -n 20 /var/log/apache2/error_log
+
+3. Firewall uitschakelen (tijdelijk):
+   sudo systemctl stop firewalld.service
+
+=== BELANGRIJKSTE BESTANDEN ===
+- Standaard website: /srv/www/htdocs/
+- Virtual hosts:     /srv/www/vhosts/
+- Apache config:     /etc/apache2/
+  - Hoofdconfig:     default-server.conf
+  - Virtual hosts:   vhosts.d/
+  - Poortinstelling: listen.conf
+- Hosts-bestanden:
+  - Linux: /etc/hosts
+  - Windows: C:\Windows\System32\drivers\etc\hosts
+
+=== TIJDBESPARENDE TIPS ===
+1. Gebruik TAB voor autocomplete in terminal
+2. Kopieer/plak commando's uit dit document
+3. Werk in deze volgorde:
+   a) Apache basis
+   b) 1 werkende website
+   c) Pas daarna virtual hosts
+4. Sla IP-adres van je server ergens op
+
+=== CRASH PROCEDURE ===
+Als iets niet werkt:
+1. Herstart Apache: sudo systemctl restart apache2
+2. Voer configtest uit: sudo apache2ctl configtest
+3. Check logs: tail -n 20 /var/log/apache2/error_log
+4. Vraag hulp aan docent als je vastzit >5 min
