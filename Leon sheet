@@ -94,3 +94,5 @@ Als iets niet werkt:
 2. Voer configtest uit: sudo apache2ctl configtest
 3. Check logs: tail -n 20 /var/log/apache2/error_log
 4. Vraag hulp aan docent als je vastzit >5 min
+
+Gebruik apache2ctl configtest bij fouten.
